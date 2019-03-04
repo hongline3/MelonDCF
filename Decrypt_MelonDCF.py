@@ -2,7 +2,7 @@ import os
 import hashlib
 import traceback
 
-filename="C:\\Users\\NHNEnt\\Desktop\\aa.dcf"
+filename="C:\\Users\\NHNEnt\\Desktop\\MyCode\\melonpy\\kk.dcf"
 
 enc_file=open(filename,"rb")
 dec_file=open(filename+".mp3","wb")
@@ -13,7 +13,7 @@ data=enc_file.read(filesize)
 enc_file.close()
 
 #9125817603
-st="9125817603"
+st="9903392773"
 data_hash=data[0x0e:0x53]
 data_hash+="min"
 data_hash+=st
@@ -41,14 +41,16 @@ for i in range(2,101):
     result_hash+=data_hash
 
 result_hash=result_hash.decode('hex')
-encrypt_data=data.split(";Size=\"")[1].split("\"\x0d\x0a")[1]
+encrypt_data=data.split(";Size=\"")[1]
+
+index=encrypt_data.find("\"\x0d\x0a")+3
+encrypt_data=encrypt_data[index:]
 
 p_data=""
 for i in range(0,128):
     p_data+=chr(ord(encrypt_data[i])^ord(result_hash[i]))
 
 try:
-
     for i in range(128,len(encrypt_data),0x8000):
         b_data=encrypt_data[i:i+0x8000]
 
@@ -72,6 +74,5 @@ try:
 
 except:
     print traceback.format_exc()
-
 dec_file.write(p_data)
 dec_file.close()
